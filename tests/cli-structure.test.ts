@@ -173,6 +173,21 @@ describe('composite structure operations', () => {
 });
 
 describe('create in-clause and set whitelist', () => {
+  it('treats shape ids as case-sensitive', () => {
+    const app = new EditorApplication();
+    app.processLine('init');
+    expect(app.processLine('create rect R 0 0 10 10')).toEqual(['rect#R created']);
+    expect(app.processLine('create rect r 1 1 2 2')).toEqual(['rect#r created']);
+    expect(app.processLine('show R')).toEqual([
+      'rect#R  parent=svg',
+      '  x=0 y=0 width=10 height=10',
+    ]);
+    expect(app.processLine('show r')).toEqual([
+      'rect#r  parent=svg',
+      '  x=1 y=1 width=2 height=2',
+    ]);
+  });
+
   it('distinguishes quoted "in" text from the in-clause', () => {
     const app = new EditorApplication();
     app.processLine('init');

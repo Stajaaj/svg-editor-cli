@@ -3,7 +3,7 @@
 实现语言为 TypeScript，运行在 Node.js 上。命令行通过 `npm run cli` 启动，所有编辑命令共享一套 undo/redo 历史；SVG 读写、自动补 id、复合图形、错误原子性等行为按实验说明实现。
 
 - 运行：`npm install`，然后 `npm run cli`
-- 测试：`npm test`（39 个测试，8 个测试文件）
+- 测试：`npm test`（40 个测试，8 个测试文件）
 - 类型检查：`npm run typecheck`
 - 文档：本文件；架构图为 [architecture.svg](architecture.svg)
 
@@ -279,7 +279,7 @@ AI 的初版方案倾向于把“解析、执行、序列化、树显示、撤�
 ### 1. 自动化验证
 
 - **TypeScript 严格模式**：`strict: true`、`noUnusedLocals`、`noUnusedParameters`、`forceConsistentCasingInFileNames`；运行 `npm run typecheck`。
-- **39 个测试，8 个测试文件**，覆盖：
+- **40 个测试，8 个测试文件**，覆盖：
 
 | 测试文件 | 覆盖内容 |
 |---|---|
@@ -292,7 +292,7 @@ AI 的初版方案倾向于把“解析、执行、序列化、树显示、撤�
 | `tests/shapes.test.ts` | 叶子/容器几何变换、状态快照恢复、父子关系 |
 | `tests/architecture.test.ts` | 依赖方向规则、一类一文件 |
 
-- 运行：`npm test`；当前结果 8/8 文件、39/39 测试通过。
+- 运行：`npm test`；当前结果 8/8 文件、40/40 测试通过。
 
 ### 2. 手工验证
 
@@ -329,7 +329,7 @@ AI 的初版方案倾向于把“解析、执行、序列化、树显示、撤�
 ```bash
 npm install
 npm run cli      # 进入 svg> REPL
-npm test         # 39 个测试
+npm test         # 40 个测试
 npm run typecheck
 ```
 

@@ -29,6 +29,9 @@ describe('document guards and io locking', () => {
     expect(app.processLine('redo')).toEqual([
       'error: undo not allowed after io command',
     ]);
+    expect(app.processLine('save')).toEqual([
+      "error: no file path; use 'save <file.svg>'",
+    ]);
 
     expect(app.processLine('create rect r 0 0 10 10')).toEqual(['rect#r created']);
     expect(app.processLine(`save ${path}`)).toEqual([
