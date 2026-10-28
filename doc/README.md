@@ -2,6 +2,7 @@
 
 实现语言为 TypeScript，运行在 Node.js 上。命令行通过 `npm run cli` 启动，所有编辑命令共享一套 undo/redo 历史；SVG 读写、自动补 id、复合图形、错误原子性等行为按实验说明实现。
 
+- Git 仓库：<https://github.com/Stajaaj/svg-editor-cli>
 - 运行：`npm install`，然后 `npm run cli`
 - 测试：`npm test`（40 个测试，8 个测试文件）
 - 类型检查：`npm run typecheck`
