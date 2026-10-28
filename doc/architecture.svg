@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680" role="img" aria-labelledby="title desc">
+  <title id="title">SVG Editor CLI 架构与依赖</title>
+  <desc id="desc">上层模块依赖下层模块：main 依赖 cli，cli 依赖 commands、io、core、shapes，commands 与 io 依赖 core 和 shapes，core 依赖 shapes，shapes 只依赖 errors/util。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5568"/>
+    </marker>
+    <style>
+      .box { fill:#ffffff; stroke:#4a5568; stroke-width:1.4; rx:8; }
+      .layer { fill:#f8fafc; stroke:#a0aec0; stroke-width:1.2; stroke-dasharray:7 5; rx:10; }
+      .title { font:600 15px "Segoe UI", "Microsoft YaHei", sans-serif; fill:#1a202c; }
+      .box-title { font:600 13px "Segoe UI", "Microsoft YaHei", sans-serif; fill:#1a202c; }
+      .sub { font:11.5px "Segoe UI", "Microsoft YaHei", sans-serif; fill:#4a5568; }
+      .label { font:11px "Segoe UI", "Microsoft YaHei", sans-serif; fill:#718096; }
+      .edge { stroke:#4a5568; stroke-width:1.6; fill:none; marker-end:url(#arrow); }
+      .edge-dash { stroke:#a0aec0; stroke-width:1.4; fill:none; stroke-dasharray:5 4; marker-end:url(#arrow); }
+      .cli { fill:#ebf8ff; stroke:#4299e1; }
+      .cmd { fill:#f0fff4; stroke:#48bb78; }
+      .io { fill:#fffaf0; stroke:#ed8936; }
+      .core { fill:#faf5ff; stroke:#9f7aea; }
+      .shape { fill:#e6fffa; stroke:#38b2ac; }
+      .base { fill:#f7fafc; stroke:#718096; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="680" fill="#ffffff"/>
+  <text class="title" x="30" y="34">SVG Editor CLI — 模块与依赖（Lab1 Phase 1）</text>
+  <text class="label" x="30" y="54">箭头表示允许的编译期依赖：上层 → 下层。完整规则与理由见 doc/README.md 的依赖表；反向依赖由 tests/architecture.test.ts 拦截。</text>
+  <text class="label" x="30" y="72">注：cli 还可直接依赖 core / shapes（适配层引用模型类型），见依赖表。</text>
+
+  <rect class="box" x="415" y="86" width="170" height="50"/>
+  <text class="box-title" x="500" y="108" text-anchor="middle">main.ts</text>
+  <text class="sub" x="500" y="125" text-anchor="middle">组合根 / 启动 REPL</text>
+
+  <rect class="layer" x="60" y="150" width="880" height="150"/>
+  <text class="box-title" x="78" y="173">cli/ — 交互与适配层</text>
+  <rect class="box cli" x="80" y="187" width="215" height="44"/>
+  <text class="box-title" x="187" y="205" text-anchor="middle">Repl · EditorApplication</text>
+  <text class="sub" x="187" y="221" text-anchor="middle">读入 / 打印 / 组装依赖</text>
+  <rect class="box cli" x="315" y="187" width="185" height="44"/>
+  <text class="box-title" x="407" y="205" text-anchor="middle">CommandRegistry</text>
+  <text class="sub" x="407" y="221" text-anchor="middle">命令名 → 适配器（分派点 1）</text>
+  <rect class="box cli" x="520" y="187" width="180" height="44"/>
+  <text class="box-title" x="610" y="205" text-anchor="middle">CommandLineParser</text>
+  <text class="sub" x="610" y="221" text-anchor="middle">分词 / 引号 / 注释 / in 子句</text>
+  <rect class="box cli" x="720" y="187" width="200" height="44"/>
+  <text class="box-title" x="820" y="205" text-anchor="middle">EditorSession</text>
+  <text class="sub" x="820" y="221" text-anchor="middle">当前文档 + History</text>
+  <rect class="box cli" x="80" y="243" width="350" height="42"/>
+  <text class="box-title" x="255" y="260" text-anchor="middle">cli/commands/ — 19 个命令适配器</text>
+  <text class="sub" x="255" y="276" text-anchor="middle">校验参数、调用领域命令或显示服务</text>
+  <rect class="box cli" x="450" y="243" width="250" height="42"/>
+  <text class="box-title" x="575" y="260" text-anchor="middle">cli/display/TreeFormatter</text>
+  <text class="sub" x="575" y="276" text-anchor="middle">结构树连接线、摘要与列对齐</text>
+  <text class="label" x="720" y="260">分派点 1：命令名 → 实现</text>
+  <text class="label" x="720" y="276">已标注为待重构（插件命令）</text>
+
+  <rect class="box cmd" x="120" y="345" width="290" height="86"/>
+  <text class="box-title" x="265" y="369" text-anchor="middle">commands/ — 领域命令</text>
+  <text class="sub" x="265" y="389" text-anchor="middle">9 个 EditCommand：create / delete / move /</text>
+  <text class="sub" x="265" y="404" text-anchor="middle">scale / set / group / ungroup / addto / reorder</text>
+  <text class="sub" x="265" y="421" text-anchor="middle">每个类实现 execute() / undo()</text>
+
+  <rect class="box io" x="630" y="345" width="290" height="86"/>
+  <text class="box-title" x="775" y="369" text-anchor="middle">io/ — 文件与 XML 边界</text>
+  <text class="sub" x="775" y="389" text-anchor="middle">SvgReader：解析、自动补 id、警告</text>
+  <text class="sub" x="775" y="404" text-anchor="middle">SvgWriter：SVG 文档序列化</text>
+  <text class="sub" x="775" y="421" text-anchor="middle">解析失败不替换当前文档</text>
+
+  <rect class="box core" x="100" y="490" width="410" height="96"/>
+  <text class="box-title" x="305" y="514" text-anchor="middle">core/ — 文档与历史</text>
+  <text class="sub" x="305" y="535" text-anchor="middle">Document：画布尺寸、id 索引、子树注册/反注册</text>
+  <text class="sub" x="305" y="552" text-anchor="middle">History：undo/redo 栈、IO 后锁定、redo 清空</text>
+  <text class="sub" x="305" y="569" text-anchor="middle">EditCommand：execute / undo 契约（命令模式）</text>
+
+  <rect class="box shape" x="570" y="490" width="350" height="96"/>
+  <text class="box-title" x="745" y="514" text-anchor="middle">shapes/ — 图形模型</text>
+  <text class="sub" x="745" y="535" text-anchor="middle">Shape · Container · Group · RootContainer</text>
+  <text class="sub" x="745" y="552" text-anchor="middle">Rect · Circle · Ellipse · Line · Text</text>
+  <text class="sub" x="745" y="569" text-anchor="middle">ShapeFactory（分派点 2，待重构）· ShapeState</text>
+
+  <rect class="box base" x="100" y="626" width="820" height="38"/>
+  <text class="box-title" x="510" y="650" text-anchor="middle">errors/ · util/ — 共享基础：EditorError / NumberValue / Plural / XmlText，不依赖任何上层模块</text>
+
+  <path class="edge" d="M500,136 L500,150"/>
+  <path class="edge" d="M280,300 L280,345"/>
+  <path class="edge" d="M775,300 L775,345"/>
+  <path class="edge" d="M265,431 L265,490"/>
+  <path class="edge" d="M385,431 L600,490"/>
+  <path class="edge" d="M660,431 L500,490"/>
+  <path class="edge" d="M790,431 L790,490"/>
+  <path class="edge" d="M510,538 L570,538"/>
+  <path class="edge-dash" d="M745,586 L745,626"/>
+</svg>
