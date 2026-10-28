@@ -12,9 +12,25 @@ type AttributeMap = Record<string, string>;
 
 export class ShapeFactory {
   private static readonly KNOWN_TYPES = ['rect', 'circle', 'ellipse', 'line', 'text', 'g'];
+  private static readonly MINIMUM_PARAMS: Record<string, number> = {
+    rect: 4,
+    circle: 3,
+    ellipse: 4,
+    line: 4,
+    text: 3,
+    g: 0,
+  };
 
   isKnownType(type: string): boolean {
     return ShapeFactory.KNOWN_TYPES.includes(type);
+  }
+
+  minimumParamCount(type: string): number {
+    return ShapeFactory.MINIMUM_PARAMS[type] ?? 0;
+  }
+
+  isContainerType(type: string): boolean {
+    return type === 'g';
   }
 
   // Allow-listed name dispatch #2 (type name -> class). Becomes a plugin registry in phase 2.

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { DOMParser, type Element } from '@xmldom/xmldom';
 import { Document } from '../core/Document';
 import { EditorError } from '../errors/EditorError';
-import { Group } from '../shapes/Group';
+import { Container } from '../shapes/Container';
 import type { Shape } from '../shapes/Shape';
 import type { ShapeFactory } from '../shapes/ShapeFactory';
 import { NumberValue } from '../util/NumberValue';
@@ -24,6 +24,8 @@ export class SvgReader {
   }
 
   parse(content: string, path: string): ReadResult {
+    const normalized =
+      content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
     let root: Element;
     try {
       const errors: string[] = [];
@@ -34,7 +36,7 @@ export class SvgReader {
           }
         },
       });
-      const dom = parser.parseFromString(content, 'image/svg+xml');
+      const dom = parser.parseFromString(normalized, 'image/svg+xml');
       if (errors.length > 0 || !dom.documentElement) {
         throw new Error('invalid XML');
       }
@@ -84,7 +86,7 @@ export class SvgReader {
         }
         ids.add(id);
       }
-      if (type === 'g') {
+      if (this.factory.isContainerType(type)) {
         this.collectExplicitIds(child, ids);
       }
     }
@@ -125,7 +127,7 @@ export class SvgReader {
       attributes,
       element.textContent ?? '',
     );
-    if (shape instanceof Group) {
+    if (shape instanceof Container) {
       for (const child of this.elementChildren(element)) {
         const nested = this.buildElement(child, usedIds, counters, warnings);
         if (nested) {

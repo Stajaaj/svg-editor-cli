@@ -7,15 +7,6 @@ import type { CliCommand } from '../CliCommand';
 import type { EditorSession } from '../EditorSession';
 import type { Token } from '../Token';
 
-const MINIMUM_PARAMS: Record<string, number> = {
-  rect: 4,
-  circle: 3,
-  ellipse: 4,
-  line: 4,
-  text: 3,
-  g: 0,
-};
-
 export class CreateCliCommand implements CliCommand {
   constructor(private readonly factory: ShapeFactory) {}
 
@@ -41,7 +32,7 @@ export class CreateCliCommand implements CliCommand {
 
     let container: Container | null = null;
     let paramsEnd = args.length;
-    const firstPossibleIn = 2 + MINIMUM_PARAMS[type]!;
+    const firstPossibleIn = 2 + this.factory.minimumParamCount(type);
     for (let index = firstPossibleIn; index < args.length; index += 1) {
       const token = args[index]!;
       if (!token.quoted && token.value === 'in') {
