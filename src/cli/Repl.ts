@@ -1,4 +1,4 @@
-import { createInterface } from 'node:readline';
+import { createInterface, type Interface } from 'node:readline';
 import type { Readable, Writable } from 'node:stream';
 import type { EditorApplication } from './EditorApplication';
 
@@ -15,7 +15,7 @@ export class Repl {
     this.output = output;
   }
 
-  start(): void {
+  start(): Interface {
     this.output.write("svg-editor 0.1 — type 'help' for commands\n\n");
     const readline = createInterface({ input: this.input, terminal: false });
     const prompt = (): void => {
@@ -29,5 +29,6 @@ export class Repl {
       }
       prompt();
     });
+    return readline;
   }
 }

@@ -17,8 +17,9 @@ export class CommandLineParser {
     for (let index = 0; index < trimmed.length; index += 1) {
       const character = trimmed[index]!;
       if (inQuotes) {
-        if (character === '\\' && index + 1 < trimmed.length) {
-          current += trimmed[index + 1]!;
+        const next = trimmed[index + 1];
+        if (character === '\\' && (next === '"' || next === '\\')) {
+          current += next;
           index += 1;
         } else if (character === '"') {
           inQuotes = false;
