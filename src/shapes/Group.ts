@@ -10,7 +10,7 @@ export class Group extends Container {
   }
 
   treeSummary(): string {
-    return this.withVisualSummary('');
+    return this.visualTreeSummary();
   }
 
   toSvg(indent: number): string {

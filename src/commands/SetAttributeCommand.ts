@@ -14,7 +14,7 @@ export class SetAttributeCommand implements EditCommand {
 
   execute(): string {
     this.state = this.shape.captureState();
-    this.oldDisplay = this.shape.attributeDisplay(this.name) ?? '';
+    this.oldDisplay = this.shape.attributeDisplay(this.name) ?? '(none)';
     this.shape.setAttribute(this.name, this.value);
     const display = this.shape.attributeDisplay(this.name) ?? this.value;
     return `${this.shape.displayName} updated: ${this.name}=${display}`;

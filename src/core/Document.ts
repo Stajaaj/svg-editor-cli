@@ -28,7 +28,7 @@ export class Document {
   }
 
   hasId(id: string): boolean {
-    return id === this.root.id || this.shapesById.has(id);
+    return this.shapesById.has(id);
   }
 
   find(id: string): Shape | undefined {

@@ -18,7 +18,12 @@ export class MoveShapesCommand implements EditCommand {
   execute(): string {
     this.state = this.shape.captureState();
     this.beforeAnchor = this.shape.anchor;
-    this.shape.translate(this.dx, this.dy);
+    try {
+      this.shape.translate(this.dx, this.dy);
+    } catch (error) {
+      this.state.restore();
+      throw error;
+    }
     this.afterAnchor = this.shape.anchor;
     if (this.afterAnchor) {
       return `${this.shape.displayName} moved to ${this.afterAnchor.format()}`;

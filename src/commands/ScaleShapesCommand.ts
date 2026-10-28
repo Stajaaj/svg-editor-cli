@@ -13,7 +13,12 @@ export class ScaleShapesCommand implements EditCommand {
 
   execute(): string {
     this.state = this.shape.captureState();
-    this.shape.scale(this.factor);
+    try {
+      this.shape.scale(this.factor);
+    } catch (error) {
+      this.state.restore();
+      throw error;
+    }
     return `${this.shape.displayName} scaled by ${NumberValue.format(this.factor)}`;
   }
 
